@@ -1,10 +1,21 @@
-<form action="." id="signupform" class="form-horizontal" role="form" method="POST">
+<form action="." class="form-horizontal" role="form" method="POST">
     {% csrf_token %}
-    <div id="signupalert" style="display:none" class="alert alert-danger">
-        <p>Error:</p>
-        <span></span>
+        <!--Username section-->
+    <div class="form-group">
+        <label for="username" class="col-md-3 control-label">Username</label>
+        <div class="col-md-9">
+          <input id="id_username" class="form-control" maxlength="150" name="username" type="text" required />
+        </div>
     </div>
 
+    <!--Password-->
+    <div class="form-group">
+        <label for="password" class="col-md-3 control-label">Password</label>
+        <div class="col-md-9">
+           <input id="id_password" name="password" class="form-control" type="password" placeholder="Password" required />
+        </div>
+    </div>
+    {% if signup %}
     <!--Email section-->
     <div class="form-group">
         <label for="email" class="col-md-3 control-label">Email</label>
@@ -27,29 +38,35 @@
         </div>
     </div>
 
-
-    <!--Username section-->
-    <div class="form-group">
-        <label for="username" class="col-md-3 control-label">Username</label>
-        <div class="col-md-9">
-          <input id="id_username" class="form-control" maxlength="150" name="username" type="text" required />
-        </div>
-    </div>
-
-    <!--Password-->
-    <div class="form-group">
-        <label for="password" class="col-md-3 control-label">Password</label>
-        <div class="col-md-9">
-           <input id="id_password" name="password" class="form-control" type="password" placeholder="Password" required />
-        </div>
-    </div>
+    {% endif %}
 
     <!--Submit button-->
     <div class="form-group">
         <!-- Button -->
         <div class="col-md-offset-3 col-md-9">
-            <button id="btn-signup" class="btn btn-info"> &nbsp Sign Up</button>
+            <button id="btn-signup" class="btn btn-info"> &nbsp
+                {% if signup %}
+                Sign Up
+            {% else %}
+                login
+                {% endif %}</button>
             <!--<span style="margin-left:8px;">or</span>-->
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-12 control">
+            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                {% if not signup %}Don't have an account!
+                {% else %}
+                Have an account
+                {% endif %}
+                <a href="#">
+                        {% if not signup %}Sign Up Here
+                        {% else %} Login
+                    {%endif%}
+                    </a>
+            </div>
         </div>
     </div>
 </form>

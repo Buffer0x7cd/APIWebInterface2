@@ -13,22 +13,21 @@ def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         users = User.objects.all()
-        users.filter()
-        for i in form:
-            print(i)
         if form.is_valid():
             user = form.save(commit=False)
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            if user.filter(website=form.cleaned_data['website']).count():
+            if users.filter(website=form.cleaned_data['website']).count():
                 render(request, 'AuthPortal/portal.html', {
                     'form': form,
                     'error': 'Website already exists',
+                    'signup': True,
                 })
-            if user.filter(phonenumber=form.cleaned_data['website']).count():
+            if users.filter(phonenumber=form.cleaned_data['phonenumber']).count():
                 render(request, 'AuthPortal/portal.html', {
                     'form': form,
                     'error': 'Phone number already exists',
+                    'signup': True,
                 })
             user.set_password(password)
             user.save()
@@ -38,8 +37,12 @@ def signup(request):
             render(request,'AuthPortal/portal.html',{
                     'form':form,
                 'error':'Enter correct Email address',
+               'signup': True,
             })
-            return render(request, 'AuthPortal/portal.html')
+        else:
+            return render(request, 'AuthPortal/portal.html',{'signup': True})
     else:
-        return render(request,'AuthPortal/portal.html')
+        return render(request,'AuthPortal/portal.html',{'signup': True})
 
+def login(request):
+    pass
