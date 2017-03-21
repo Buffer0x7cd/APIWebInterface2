@@ -1,9 +1,10 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from CustomUser.models import User
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 
 # Create your views here.
-from AuthPortal.forms import UserForm
+from AuthPortal.forms import UserForm,LoginForm
 
 
 def index(request):
@@ -40,9 +41,24 @@ def signup(request):
                'signup': True,
             })
         else:
-            return render(request, 'AuthPortal/portal.html',{'signup': True})
+            return render(request, 'AuthPortal/portal.html',{'signup': True, 'form':form})
     else:
         return render(request,'AuthPortal/portal.html',{'signup': True})
 
-def login(request):
-    pass
+def login_user(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponse('sucessfull')
+            else:
+                return render(request, 'AuthPortal/portal.html',
+                              {'form': form, 'error_message': 'Your Account is blocked'})
+        else:
+            return render(request, 'AuthPortal/portal.html',
+                          {'form': form, 'error_message': 'Incorrect Credential',})
+    return render(request, 'AuthPortal/portal.html')
